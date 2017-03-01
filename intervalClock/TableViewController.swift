@@ -24,6 +24,8 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
         self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.tintColor = UIColor.orange
 
         tableContentView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         tableContentView.delegate = self
@@ -116,12 +118,16 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         return availableInterval.count
     }
     
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        print("accessoryButtonTappedForRowWithIndexPath")
+    }
+    
     // create a cell for each row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell = tableContentView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
         cell.textLabel?.text = self.availableInterval[(indexPath as NSIndexPath).row]
-        cell.textLabel?.textColor = UIColor.black
-        cell.backgroundColor = UIColor.clear
+        cell.textLabel?.textColor = UIColor.white
+        cell.backgroundColor = UIColor.black
         return cell
     }
     

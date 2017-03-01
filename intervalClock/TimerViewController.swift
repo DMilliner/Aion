@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AudioToolbox
+import AVFoundation
 
 class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
@@ -35,6 +37,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.tintColor = UIColor.orange
+
         navigationItem.title = valueTitle
         
         activeCounter = valueActive
@@ -49,8 +54,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-
 
     }
     
@@ -58,7 +61,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
 
 //        self.view.applyGradient(colours: [UIColor.yellow, UIColor.blue, UIColor.red], locations: [0.0, 0.5, 1.0])
 //        self.view.applyGradient(colours: [UIColor.yellow, UIColor.blue])
-        self.view.backgroundColor = UIColor.red
+//        self.view.backgroundColor = UIColor.red
+        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
 
         if activeCounter >= 0.10 {
             let timeString = String(format: "%.2f", activeCounter)
@@ -71,10 +76,14 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 
                 activeTimer?.invalidate()
                 
+                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+                AudioServicesPlaySystemSound (1257)
+                
                 restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
                 restTimer?.fire()
             } else {
-                self.view.backgroundColor = UIColor.purple
+//                self.view.backgroundColor = UIColor.purple
+                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
                 restTimer?.invalidate()
                 activeTimer?.invalidate()
                 timeValueLabel.text = "Done"
@@ -84,7 +93,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     func updateRestCounter() {
-        self.view.backgroundColor = UIColor.green
+//        self.view.backgroundColor = UIColor.green
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
+
         if restCounter >= 0.10 {
             let timeString = String(format: "%.2f", restCounter)
             timeValueLabel.text = timeString
@@ -96,6 +107,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             workoutProgress.progress = Float(Double(currentRoundsValue)/Double(valueRounds))
             restTimer?.invalidate()
             
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+            AudioServicesPlaySystemSound (1258)
+
             activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
             activeTimer?.fire()
         }
@@ -112,12 +126,16 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         activeCounter = valueActive
         restCounter = valueRest
         roundsMax = valueRounds
-        
+        currentRoundsValue = 0
         workoutProgress.progress = 0
         timeValueLabel.text = valueActive.description
-        self.view.backgroundColor = UIColor.white
+        
+        self.view.backgroundColor = UIColor.black
         
         startButton.setTitle("Start", for: .normal)
+        startButton.setTitleColor(UIColor.green, for: .normal)
+        startButton.backgroundColor = UIColor.init(red: 0, green: 144/255, blue: 0, alpha: 0.42)
+        
         pausedDuringRestTime = false
         running = false
         
@@ -131,6 +149,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
 
         if running == false {
             startButton.setTitle("Pause", for: .normal)
+            startButton.setTitleColor(UIColor.green, for: .normal)
+            startButton.backgroundColor = UIColor.init(red: 0, green: 144/255, blue: 0, alpha: 0.42)
             running = true
 
             if pausedDuringRestTime {
@@ -143,7 +163,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             }
 
         } else {
-            startButton.setTitle("Start", for: .normal)
+            startButton.setTitle("Resume", for: .normal)
+            startButton.setTitleColor(UIColor.orange, for: .normal)
+            startButton.backgroundColor = UIColor.init(red: 144/255, green: 72/255, blue: 0, alpha: 0.42)
+            
             running = false
 
             if activeTimer != nil && restTimer == nil {

@@ -20,7 +20,9 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.tintColor = UIColor.orange
+
         startWorkout.isEnabled = false
 
         activeTimeField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
@@ -32,7 +34,9 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     }
     
     func didChangeText(textField:UITextField) {
-        startWorkout.isEnabled = true
+        if(!(activeTimeField.text?.isEmpty)! && !(restTimeField.text?.isEmpty)! && !(roundsField.text?.isEmpty)! && !(nameField.text?.isEmpty)!){
+            startWorkout.isEnabled = true
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,39 +46,41 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     
     @IBAction func startCustomizedWorkout(sender: UIButton) {
         startWorkout.isEnabled = false
-
-        //Save the new workout in the list that will build the tableView
         
-        var intervalWorkoutList = [IntervalWorkout]()
-        if let data = UserDefaults().object(forKey: "intervalWorkoutList") as? NSData {
-            print("previous list")//Maybe not useful ??
-            intervalWorkoutList = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [IntervalWorkout]
-            intervalWorkoutList.append(
-                IntervalWorkout.init(activeValue: Double(activeTimeField.text!)!,
-                                     restValue: Double(restTimeField.text!)!,
-                                     roundsValue: Int(roundsField.text!)!,
-                                     titleValue: nameField.text!))
+        if(!(activeTimeField.text?.isEmpty)! && !(restTimeField.text?.isEmpty)! && !(roundsField.text?.isEmpty)! && !(nameField.text?.isEmpty)!){
             
-            let data = NSKeyedArchiver.archivedData(withRootObject: intervalWorkoutList)
-            UserDefaults().set(data, forKey: "intervalWorkoutList")
-        } else {
-            print("create a new list")
-            intervalWorkoutList.append(
-                IntervalWorkout.init(activeValue: Double(activeTimeField.text!)!,
-                                     restValue: Double(restTimeField.text!)!,
-                                     roundsValue: Int(roundsField.text!)!,
-                                     titleValue: nameField.text!))
-
-            let data = NSKeyedArchiver.archivedData(withRootObject: intervalWorkoutList)
-            UserDefaults().set(data, forKey: "intervalWorkoutList")
+            //Save the new workout in the list that will build the tableView
+            
+            var intervalWorkoutList = [IntervalWorkout]()
+            if let data = UserDefaults().object(forKey: "intervalWorkoutList") as? NSData {
+                print("previous list")//Maybe not useful ??
+                intervalWorkoutList = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [IntervalWorkout]
+                intervalWorkoutList.append(
+                    IntervalWorkout.init(activeValue: Double(activeTimeField.text!)!,
+                                         restValue: Double(restTimeField.text!)!,
+                                         roundsValue: Int(roundsField.text!)!,
+                                         titleValue: nameField.text!))
+                
+                let data = NSKeyedArchiver.archivedData(withRootObject: intervalWorkoutList)
+                UserDefaults().set(data, forKey: "intervalWorkoutList")
+            } else {
+                print("create a new list")
+                intervalWorkoutList.append(
+                    IntervalWorkout.init(activeValue: Double(activeTimeField.text!)!,
+                                         restValue: Double(restTimeField.text!)!,
+                                         roundsValue: Int(roundsField.text!)!,
+                                         titleValue: nameField.text!))
+                
+                let data = NSKeyedArchiver.archivedData(withRootObject: intervalWorkoutList)
+                UserDefaults().set(data, forKey: "intervalWorkoutList")
+            }
+            
+            let timerViewController = self.storyboard?.instantiateViewController(withIdentifier: "timerView") as! TimerViewController
+            timerViewController.valueActive = Double(activeTimeField.text!)!
+            timerViewController.valueRest = Double(restTimeField.text!)!
+            timerViewController.valueRounds = Int(roundsField.text!)!
+            timerViewController.valueTitle = nameField.text!
+            self.navigationController?.setViewControllers([timerViewController], animated: false)
         }
-        
-        let timerViewController = self.storyboard?.instantiateViewController(withIdentifier: "timerView") as! TimerViewController
-        timerViewController.valueActive = Double(activeTimeField.text!)!
-        timerViewController.valueRest = Double(restTimeField.text!)!
-        timerViewController.valueRounds = Int(roundsField.text!)!
-        timerViewController.valueTitle = nameField.text!
-        self.navigationController?.setViewControllers([timerViewController], animated: false)
-        
     }
 }
