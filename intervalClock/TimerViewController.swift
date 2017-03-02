@@ -34,7 +34,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     weak var restTimer: Timer?
 
     var window: UIWindow?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.barStyle = .black
@@ -49,20 +49,31 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         workoutProgress.progress = 0
         workoutProgress.transform = workoutProgress.transform.scaledBy(x: 1, y: 16)
         timeValueLabel.text = valueActive.description
+        
+        startButton.layer.borderWidth = 2
+        startButton.layer.borderColor = UIColor.green.cgColor
+        resetButton.layer.borderWidth = 2
+        resetButton.layer.borderColor = UIColor.white.cgColor
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        UIApplication.shared.isIdleTimerDisabled = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
 
     }
     
+    func appMovedToBackground() {
+        print("App moved to background!")
+    }
+    
     func updateActiveCounter() {
-
-//        self.view.applyGradient(colours: [UIColor.yellow, UIColor.blue, UIColor.red], locations: [0.0, 0.5, 1.0])
-//        self.view.applyGradient(colours: [UIColor.yellow, UIColor.blue])
-//        self.view.backgroundColor = UIColor.red
-        
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
 
         if activeCounter >= 0.10 {
@@ -73,7 +84,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             roundsMax -= 1
             if roundsMax > 0{
                 restCounter = valueRest
-                
                 activeTimer?.invalidate()
                 
                 AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -82,7 +92,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
                 restTimer?.fire()
             } else {
-//                self.view.backgroundColor = UIColor.purple
                 self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
                 restTimer?.invalidate()
                 activeTimer?.invalidate()
@@ -93,16 +102,17 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     func updateRestCounter() {
-//        self.view.backgroundColor = UIColor.green
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
 
         if restCounter >= 0.10 {
             let timeString = String(format: "%.2f", restCounter)
             timeValueLabel.text = timeString
             restCounter -= 0.05
+
         } else {
             activeCounter = valueActive
             currentRoundsValue += 1
+            print("Rounds \(currentRoundsValue)")
 
             workoutProgress.progress = Float(Double(currentRoundsValue)/Double(valueRounds))
             restTimer?.invalidate()
@@ -151,6 +161,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             startButton.setTitle("Pause", for: .normal)
             startButton.setTitleColor(UIColor.green, for: .normal)
             startButton.backgroundColor = UIColor.init(red: 0, green: 144/255, blue: 0, alpha: 0.42)
+            startButton.layer.borderWidth = 2
+            startButton.layer.borderColor = UIColor.green.cgColor
             running = true
 
             if pausedDuringRestTime {
@@ -166,7 +178,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             startButton.setTitle("Resume", for: .normal)
             startButton.setTitleColor(UIColor.orange, for: .normal)
             startButton.backgroundColor = UIColor.init(red: 144/255, green: 72/255, blue: 0, alpha: 0.42)
-            
+            startButton.layer.borderWidth = 2
+            startButton.layer.borderColor = UIColor.orange.cgColor
             running = false
 
             if activeTimer != nil && restTimer == nil {
@@ -178,17 +191,3 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
 }
-
-//extension UIView {
-//    func applyGradient(colours: [UIColor]) -> Void {
-//        self.applyGradient(colours: colours, locations: nil)
-//    }
-//    
-//    func applyGradient(colours: [UIColor], locations: [NSNumber]?) -> Void {
-//        let gradient: CAGradientLayer = CAGradientLayer()
-//        gradient.frame = self.bounds
-//        gradient.colors = colours.map { $0.cgColor }
-//        gradient.locations = locations
-//        self.layer.insertSublayer(gradient, at: 0)
-//    }
-//}

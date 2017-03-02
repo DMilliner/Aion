@@ -13,10 +13,9 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
     
     var window: UIWindow?
     
-    @IBOutlet var tableContentView: UITableView!
+    @IBOutlet weak var tableContentView: UITableView!
     @IBOutlet weak var editButton: UIButton!
     
-    // cell reuse id (cells that scroll out of view can be reused)
     let cellReuseIdentifier = "cell"
     var availableInterval: [String] = []
     var intervalWorkoutList = [IntervalWorkout]()
@@ -27,7 +26,7 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.tintColor = UIColor.orange
 
-        tableContentView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        tableContentView.register(WorkoutTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         tableContentView.delegate = self
         tableContentView.dataSource = self
         tableContentView.tableFooterView = UIView()
@@ -44,15 +43,10 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
                                      roundsValue: 8,
                                      titleValue: "TABATA"))
             intervalWorkoutList.append(
-                IntervalWorkout.init(activeValue: 15,
-                                     restValue: 10,
-                                     roundsValue: 8,
-                                     titleValue: "test -1"))
-            intervalWorkoutList.append(
-                IntervalWorkout.init(activeValue: 25,
-                                     restValue: 10,
-                                     roundsValue: 8,
-                                     titleValue: "test -2"))
+                IntervalWorkout.init(activeValue: 60,
+                                     restValue: 0,
+                                     roundsValue: 12,
+                                     titleValue: "EMOM"))
             let data = NSKeyedArchiver.archivedData(withRootObject: intervalWorkoutList)
             UserDefaults().set(data, forKey: "intervalWorkoutList")
         }
@@ -118,16 +112,24 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         return availableInterval.count
     }
     
-    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        print("accessoryButtonTappedForRowWithIndexPath")
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return cellAtIndexPath(indexPath)
     }
     
-    // create a cell for each row
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:UITableViewCell = tableContentView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
-        cell.textLabel?.text = self.availableInterval[(indexPath as NSIndexPath).row]
-        cell.textLabel?.textColor = UIColor.white
+    func cellAtIndexPath(_ indexPath:IndexPath) -> WorkoutTableViewCell {
+        let cell:WorkoutTableViewCell = tableContentView.dequeueReusableCell(withIdentifier: "WorkoutCell") as! WorkoutTableViewCell
+        
+        cell.cellTitle?.text = intervalWorkoutList[(indexPath as NSIndexPath).row].titleValue
+        cell.cellSubTitleOne?.text = "Act: " + intervalWorkoutList[(indexPath as NSIndexPath).row].activeValue.description
+        cell.cellSubTitleTwo?.text = "Rest: " + intervalWorkoutList[(indexPath as NSIndexPath).row].restValue.description
+        cell.cellSubTitleThree?.text = "Rounds: " + intervalWorkoutList[(indexPath as NSIndexPath).row].roundsValue.description
+        
+        cell.cellTitle?.textColor = UIColor.white
+        cell.cellSubTitleOne?.textColor = UIColor.white
+        cell.cellSubTitleTwo?.textColor = UIColor.white
+        cell.cellSubTitleThree?.textColor = UIColor.white
         cell.backgroundColor = UIColor.black
+        
         return cell
     }
     

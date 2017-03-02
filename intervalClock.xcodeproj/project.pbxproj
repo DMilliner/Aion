@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CB796C41E672635008D2801 /* WorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB796C31E672635008D2801 /* WorkoutTableViewCell.swift */; };
 		0CF649A61E5DCC3E00A4FB73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF649A51E5DCC3E00A4FB73 /* AppDelegate.swift */; };
 		0CF649A81E5DCC3E00A4FB73 /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF649A71E5DCC3E00A4FB73 /* TimerViewController.swift */; };
 		0CF649AB1E5DCC3E00A4FB73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CF649A91E5DCC3E00A4FB73 /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0CB796C31E672635008D2801 /* WorkoutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		0CF649A21E5DCC3E00A4FB73 /* intervalClock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = intervalClock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CF649A51E5DCC3E00A4FB73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0CF649A71E5DCC3E00A4FB73 /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				0CF649A91E5DCC3E00A4FB73 /* Main.storyboard */,
 				0CF649D51E5EEFA000A4FB73 /* IntervalWorkout.swift */,
 				0CF649D71E5F0DC300A4FB73 /* CustomWorkoutViewController.swift */,
+				0CB796C31E672635008D2801 /* WorkoutTableViewCell.swift */,
 			);
 			path = intervalClock;
 			sourceTree = "<group>";
@@ -204,6 +207,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = H4YCDM74NE;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					0CF649B51E5DCC3E00A4FB73 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -272,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CF649D61E5EEFA000A4FB73 /* IntervalWorkout.swift in Sources */,
+				0CB796C41E672635008D2801 /* WorkoutTableViewCell.swift in Sources */,
 				0CF649A81E5DCC3E00A4FB73 /* TimerViewController.swift in Sources */,
 				0CF649D41E5DE4A500A4FB73 /* TableViewController.swift in Sources */,
 				0CF649A61E5DCC3E00A4FB73 /* AppDelegate.swift in Sources */,
@@ -526,6 +535,7 @@
 				0CF649CC1E5DCC3F00A4FB73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0CF649CD1E5DCC3F00A4FB73 /* Build configuration list for PBXNativeTarget "intervalClockTests" */ = {
 			isa = XCConfigurationList;
@@ -534,6 +544,7 @@
 				0CF649CF1E5DCC3F00A4FB73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0CF649D01E5DCC3F00A4FB73 /* Build configuration list for PBXNativeTarget "intervalClockUITests" */ = {
 			isa = XCConfigurationList;
@@ -542,6 +553,7 @@
 				0CF649D21E5DCC3F00A4FB73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
