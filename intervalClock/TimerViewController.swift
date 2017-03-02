@@ -145,7 +145,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         startButton.setTitle("Start", for: .normal)
         startButton.setTitleColor(UIColor.green, for: .normal)
         startButton.backgroundColor = UIColor.init(red: 0, green: 144/255, blue: 0, alpha: 0.42)
-        
+        startButton.layer.borderWidth = 2
+        startButton.layer.borderColor = UIColor.green.cgColor
         pausedDuringRestTime = false
         running = false
         

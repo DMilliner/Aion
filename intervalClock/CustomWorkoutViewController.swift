@@ -29,7 +29,8 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         restTimeField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
         roundsField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
         nameField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
-        
+        startWorkout.layer.borderWidth = 2
+        startWorkout.layer.borderColor = UIColor.green.cgColor
 
     }
     
