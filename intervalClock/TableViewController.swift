@@ -120,14 +120,34 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         let cell:WorkoutTableViewCell = tableContentView.dequeueReusableCell(withIdentifier: "WorkoutCell") as! WorkoutTableViewCell
         
         cell.cellTitle?.text = intervalWorkoutList[(indexPath as NSIndexPath).row].titleValue
-        cell.cellSubTitleOne?.text = "Act: " + intervalWorkoutList[(indexPath as NSIndexPath).row].activeValue.description
-        cell.cellSubTitleTwo?.text = "Rest: " + intervalWorkoutList[(indexPath as NSIndexPath).row].restValue.description
-        cell.cellSubTitleThree?.text = "Rounds: " + intervalWorkoutList[(indexPath as NSIndexPath).row].roundsValue.description
+        cell.cellSubTitleOne?.text = "  " + String(format: "%.0f", intervalWorkoutList[(indexPath as NSIndexPath).row].activeValue) + "s"
+        cell.cellSubTitleTwo?.text = "  " + String(format: "%.0f", intervalWorkoutList[(indexPath as NSIndexPath).row].restValue) + "s"
+        cell.cellSubTitleThree?.text = "  " + intervalWorkoutList[(indexPath as NSIndexPath).row].roundsValue.description
         
-        cell.cellTitle?.textColor = UIColor.white
-        cell.cellSubTitleOne?.textColor = UIColor.white
-        cell.cellSubTitleTwo?.textColor = UIColor.white
-        cell.cellSubTitleThree?.textColor = UIColor.white
+        cell.cellTitle.textColor = UIColor.white
+        cell.cellSubTitleOne.textColor = UIColor.white
+        cell.cellSubTitleTwo.textColor = UIColor.white
+        cell.cellSubTitleThree.textColor = UIColor.white
+        
+        cell.cellTitle.adjustsFontSizeToFitWidth = true
+        cell.cellTitle.minimumScaleFactor = 0.2
+        cell.cellTitle.numberOfLines = 0
+        
+        cell.imageOne.image = UIImage(named: "Run")
+        cell.cellSubTitleOne.adjustsFontSizeToFitWidth = true
+        cell.cellSubTitleOne.minimumScaleFactor = 0.2
+        cell.cellSubTitleOne.numberOfLines = 0
+        
+        cell.imageTwo.image = UIImage(named: "Spa")
+        cell.cellSubTitleTwo.adjustsFontSizeToFitWidth = true
+        cell.cellSubTitleTwo.minimumScaleFactor = 0.2
+        cell.cellSubTitleTwo.numberOfLines = 0
+        
+        cell.imageThree.image = UIImage(named: "InfiniteLoop")
+        cell.cellSubTitleThree.adjustsFontSizeToFitWidth = true
+        cell.cellSubTitleThree.minimumScaleFactor = 0.2
+        cell.cellSubTitleThree.numberOfLines = 0
+        
         cell.backgroundColor = UIColor.black
         
         return cell
