@@ -39,9 +39,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.tintColor = UIColor.orange
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
 
         navigationItem.title = valueTitle
-        
+
         activeCounter = valueActive
         restCounter = valueRest
         roundsMax = valueRounds

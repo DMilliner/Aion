@@ -98,6 +98,20 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         })
     }
     
+    func makeValueReadable(_ stringActiveValue: String)->String{
+        
+        let IntValueFromString:Int = Int(stringActiveValue)!
+        let valueInMinute = (IntValueFromString % 3600) / 60
+        let valueInSecond = (IntValueFromString % 3600) % 60
+        if (valueInMinute == 0){
+            return valueInSecond.description + "s"
+        } else if (valueInSecond == 0){
+            return valueInMinute.description + "m "
+        } else {
+            return valueInMinute.description + "m " + valueInSecond.description + "s"
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -120,9 +134,9 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         let cell:WorkoutTableViewCell = tableContentView.dequeueReusableCell(withIdentifier: "WorkoutCell") as! WorkoutTableViewCell
         
         cell.cellTitle?.text = intervalWorkoutList[(indexPath as NSIndexPath).row].titleValue
-        cell.cellSubTitleOne?.text = "  " + String(format: "%.0f", intervalWorkoutList[(indexPath as NSIndexPath).row].activeValue) + "s"
-        cell.cellSubTitleTwo?.text = "  " + String(format: "%.0f", intervalWorkoutList[(indexPath as NSIndexPath).row].restValue) + "s"
-        cell.cellSubTitleThree?.text = "  " + intervalWorkoutList[(indexPath as NSIndexPath).row].roundsValue.description
+        cell.cellSubTitleOne?.text = " " + makeValueReadable(String(format: "%.0f", intervalWorkoutList[(indexPath as NSIndexPath).row].activeValue))
+        cell.cellSubTitleTwo?.text = " " + makeValueReadable(String(format: "%.0f", intervalWorkoutList[(indexPath as NSIndexPath).row].restValue))
+        cell.cellSubTitleThree?.text = " " + intervalWorkoutList[(indexPath as NSIndexPath).row].roundsValue.description
         
         cell.cellTitle.textColor = UIColor.white
         cell.cellSubTitleOne.textColor = UIColor.white
@@ -160,7 +174,7 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         timerViewController.valueRest = intervalWorkoutList[identifier].restValue
         timerViewController.valueRounds = intervalWorkoutList[identifier].roundsValue
         timerViewController.valueTitle = intervalWorkoutList[identifier].titleValue
-        self.navigationController?.setViewControllers([timerViewController], animated: false)
+        self.navigationController?.setViewControllers([timerViewController], animated: true)
         
     }
     

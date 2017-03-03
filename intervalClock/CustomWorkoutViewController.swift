@@ -21,14 +21,21 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     @IBOutlet weak var startWorkout: UIButton!
     @IBOutlet weak var customView: UIScrollView!
 
-    var hour:Int = 0
-    var minute:Int = 0
-    var valueList:[String] = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
-                              "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
-                              "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-                              "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
-                              "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
-                              "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"]
+    var activeTimeInMinute:Int = 0
+    var restTimeInMinute:Int = 0
+    var activeTimeInSecond:Int = 0
+    var restTimeInSecond:Int = 0
+    
+    
+    var valueSecond:[String] = ["00", "01", "02", "03", "04", "05", "10", "15","20",
+                                "25", "30", "40", "45", "50", "55", "60"]
+    
+    var valueMinute:[String] = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
+                                "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+                                "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
+                                "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
+                                "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
+                                "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,53 +87,55 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return valueList.count
+        switch component {
+        case 0:
+            return valueMinute.count
+            
+        case 1:
+            return valueSecond.count
+            
+        default:
+            print("No component with number \(component)")
+            return 0
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return valueList[row]
+        switch component {
+        case 0:
+            return valueMinute[row]
+        case 1:
+            return valueSecond[row]
+        default:
+            print("No component with number \(component)")
+            return "???"
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch component {
         case 0:
             if pickerView.tag == 0 {
-                self.hour = row
-                print("self.hour -0- \(row)")
+                self.activeTimeInMinute = Int(valueMinute[row])!
+                print("activeTimeInMinute \(valueMinute[row])")
             } else if pickerView.tag == 1 {
-                self.hour = row
-                print("self.hour -1- \(row)")
+                self.restTimeInMinute = Int(valueMinute[row])!
+                print("restTimeInMinute \(valueMinute[row])")
             }
 
         case 1:
             if pickerView.tag == 0 {
-                self.minute = row
-                print("self.minute -0- \(row)")
+                self.activeTimeInSecond = Int(valueSecond[row])!
+                print("self.minute -0- \(valueSecond[row])")
             } else if pickerView.tag == 1 {
-                self.minute = row
-                print("self.minute -1- \(row)")
+                self.restTimeInSecond = Int(valueSecond[row])!
+                print("self.minute -1- \(valueSecond[row])")
             }
 
         default:
             print("No component with number \(component)")
         }
     }
-    
-//    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-//        return 30
-//    }
-//    
-//    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-//        if (view != nil) {
-//            (view as! UILabel).text = String(format:"%02lu", row)
-//            return view!
-//        }
-//        let columnView = UILabel(frame: CGRect(x: 35, y: 0, width: self.view.frame.size.width/3 - 35, height: 30))
-//        columnView.text = String(format:"%02lu", row)
-//        columnView.textAlignment = NSTextAlignment.center
-//        
-//        return columnView
-//    }
     
     @IBAction func startCustomizedWorkout(sender: UIButton) {
         startWorkout.isEnabled = false
@@ -140,8 +149,8 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
                 print("previous list")//Maybe not useful ??
                 intervalWorkoutList = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [IntervalWorkout]
                 intervalWorkoutList.append(
-                    IntervalWorkout.init(activeValue: 10,
-                                         restValue: 10,
+                    IntervalWorkout.init(activeValue: Double(Int(Int(activeTimeInMinute * 60) + activeTimeInSecond)),
+                                         restValue: Double(Int(Int(restTimeInMinute * 60) + restTimeInSecond)),
                                          roundsValue: Int(roundsField.text!)!,
                                          titleValue: nameField.text!))
                 
@@ -150,8 +159,8 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
             } else {
                 print("create a new list")
                 intervalWorkoutList.append(
-                    IntervalWorkout.init(activeValue: 10,
-                                         restValue: 10,
+                    IntervalWorkout.init(activeValue: Double(Int(Int(activeTimeInMinute * 60) + activeTimeInSecond)),
+                                         restValue: Double(Int(Int(restTimeInMinute * 60) + restTimeInSecond)),
                                          roundsValue: Int(roundsField.text!)!,
                                          titleValue: nameField.text!))
                 
@@ -160,11 +169,11 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
             }
             
             let timerViewController = self.storyboard?.instantiateViewController(withIdentifier: "timerView") as! TimerViewController
-            timerViewController.valueActive = 10
-            timerViewController.valueRest = 10
+            timerViewController.valueActive = Double(Int(Int(activeTimeInMinute * 60) + activeTimeInSecond))
+            timerViewController.valueRest = Double(Int(Int(restTimeInMinute * 60) + restTimeInSecond))
             timerViewController.valueRounds = Int(roundsField.text!)!
             timerViewController.valueTitle = nameField.text!
-            self.navigationController?.setViewControllers([timerViewController], animated: false)
+            self.navigationController?.setViewControllers([timerViewController], animated: true)
         }
     }
 }
