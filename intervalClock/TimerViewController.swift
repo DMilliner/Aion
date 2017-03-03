@@ -62,6 +62,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         UIApplication.shared.isIdleTimerDisabled = true
+//        UIApplication.shared.applicationIconBadgeNumber = 0
+//        UIApplication.shared.cancelAllLocalNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -71,6 +73,64 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     func appMovedToBackground() {
         print("App moved to background!")
+//        if (activeTimer != nil) {
+//            if(activeTimer?.isValid)!{
+//                print("Active timer is running...")
+//                for index in 1...valueRounds {
+//                    let indexDouble:Double = Double(index)
+//
+//                    if(index == 1){
+//                        let notification = UILocalNotification()
+//                        notification.fireDate = NSDate(timeIntervalSinceNow: activeCounter) as Date
+//                        notification.alertBody = "Active -- ("+index.description+")"
+//                        notification.alertAction = "be awesome!"
+//                        notification.soundName = UILocalNotificationDefaultSoundName
+//                        notification.userInfo = ["CustomField1": "w00t"]
+//                        UIApplication.shared.scheduleLocalNotification(notification)
+//                    } else if (index == 2){
+//                        let notification = UILocalNotification()
+//                        notification.fireDate = NSDate(timeIntervalSinceNow: activeCounter + valueRest) as Date
+//                        notification.alertBody = "Rest -- ("+index.description+")"
+//                        notification.alertAction = "be awesome!"
+//                        notification.soundName = UILocalNotificationDefaultSoundName
+//                        notification.userInfo = ["CustomField1": "w00t"]
+//                        UIApplication.shared.scheduleLocalNotification(notification)
+//                    } else {
+//                        if(index % 2 == 0){
+//                            let notification = UILocalNotification()
+//                            notification.fireDate = NSDate(timeIntervalSinceNow: (indexDouble - 2.0) * (valueActive + valueRest) + (activeCounter + valueRest)) as Date
+//                            notification.alertBody = "Rest -- ("+index.description+")"
+//                            notification.alertAction = "be awesome!"
+//                            notification.soundName = UILocalNotificationDefaultSoundName
+//                            notification.userInfo = ["CustomField1": "w00t"]
+//                            UIApplication.shared.scheduleLocalNotification(notification)
+//                        } else {
+//                            let notification = UILocalNotification()
+//                            notification.fireDate = NSDate(timeIntervalSinceNow: (indexDouble - 2.0) * valueActive + (indexDouble - 3.0) * valueRest + (activeCounter + valueRest)) as Date
+//                            notification.alertBody = "Active -- ("+index.description+")"
+//                            notification.alertAction = "be awesome!"
+//                            notification.soundName = UILocalNotificationDefaultSoundName
+//                            notification.userInfo = ["CustomField1": "w00t"]
+//                            UIApplication.shared.scheduleLocalNotification(notification)
+//                        }
+//                    }
+//                }
+//            }
+//        } else if (restTimer != nil) {
+//            print("Rest timer is running...")
+//
+//        } else {
+//            print("No timer is running...")
+//        }
+//
+//        
+//        guard let settings = UIApplication.shared.currentUserNotificationSettings else { return }
+//        if settings.types == .none {
+//            let ac = UIAlertController(title: "Can't schedule", message: "Either we don't have permission to schedule notifications, or we haven't asked yet.", preferredStyle: .alert)
+//            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            present(ac, animated: true, completion: nil)
+//            return
+//        }
     }
     
     func updateActiveCounter() {
@@ -86,8 +146,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 restCounter = valueRest
                 activeTimer?.invalidate()
                 
-                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-                AudioServicesPlaySystemSound (1257)
+//                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+//                AudioServicesPlaySystemSound (1257)
                 
                 restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
                 restTimer?.fire()
