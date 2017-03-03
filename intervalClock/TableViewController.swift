@@ -180,7 +180,7 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableContentView.deselectRow(at: indexPath, animated: true)
+        deselectAllRows()
         switchToViewController(identifier: (indexPath as NSIndexPath).row)
         
     }
