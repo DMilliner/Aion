@@ -33,10 +33,8 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         tableContentView.backgroundColor = UIColor(white: 1, alpha: 0)
         
         if let data = UserDefaults().object(forKey: "intervalWorkoutList") as? NSData {
-            print("previous list")
             intervalWorkoutList = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [IntervalWorkout]
         } else {
-            print("create a new list")
             intervalWorkoutList.append(
                 IntervalWorkout.init(activeValue: 20,
                                      restValue: 10,
@@ -53,7 +51,6 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         
         if let data = UserDefaults().object(forKey: "intervalWorkoutList") as? NSData {
             intervalWorkoutList =  NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [IntervalWorkout]
-            print("Size object list = \(intervalWorkoutList.count)")
         }
     }
     
@@ -92,7 +89,6 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
     }
     
     func reloadProfilePickerContent() {
-        print("Loading profiles data")
         DispatchQueue.main.async(execute: { () -> Void in
             self.tableContentView.reloadData()
         })
@@ -221,7 +217,6 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { action, index in
-            print("-------- Delete --------")
             
             let deleteRowAlert = UIAlertController(title: "Delete Interval Workout", message: "All this will be lost.", preferredStyle: .alert)
             deleteRowAlert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action: UIAlertAction!) in
@@ -241,7 +236,7 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         delete.backgroundColor = UIColor.red
         
         let rename = UITableViewRowAction(style: .default, title: "Rename") { action, index in
-            print("-------- Rename --------")
+
             let renameRowAlert = UIAlertController(title: "Rename Interval Workout", message: "Enter a new name", preferredStyle: .alert)
             renameRowAlert.addTextField { (textField) in
                 textField.text = self.intervalWorkoutList[indexPath.row].titleValue

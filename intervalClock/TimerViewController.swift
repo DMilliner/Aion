@@ -49,7 +49,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         
         workoutProgress.progress = 0
         workoutProgress.transform = workoutProgress.transform.scaledBy(x: 1, y: 16)
-        timeValueLabel.text = valueActive.description
+        timeValueLabel.text =  String(format: "%.2f", valueActive)
         
         startButton.layer.borderWidth = 2
         startButton.layer.borderColor = UIColor.green.cgColor
@@ -187,7 +187,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func backToTableView(_ sender: UIButton){
-        print("Cancel")
+        print("Done")
         restTimer?.invalidate()
         activeTimer?.invalidate()
     }
@@ -201,7 +201,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         workoutProgress.progress = 0
         timeValueLabel.text = valueActive.description
         
-        self.view.backgroundColor = UIColor.black
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
         
         startButton.setTitle("Start", for: .normal)
         startButton.setTitleColor(UIColor.green, for: .normal)
@@ -217,7 +217,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func pressedStart(_ sender: UIButton){
-        print("Start or Pause")
+        print("Start // Pause")
 
         if running == false {
             startButton.setTitle("Pause", for: .normal)

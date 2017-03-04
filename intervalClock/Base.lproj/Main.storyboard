@@ -365,7 +365,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xmD-Ab-ULI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2356.521739130435" y="748.36956521739137"/>
+            <point key="canvasLocation" x="2357" y="606"/>
         </scene>
         <!--Timer View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -466,7 +466,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <exit id="bNE-NP-Y4c" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3148" y="-891.00449775112452"/>
+            <point key="canvasLocation" x="1568" y="-869"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r0R-az-1iN">

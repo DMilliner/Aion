@@ -90,12 +90,9 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         switch component {
         case 0:
             return valueMinute.count
-            
         case 1:
             return valueSecond.count
-            
         default:
-            print("No component with number \(component)")
             return 0
         }
     }
@@ -107,7 +104,6 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         case 1:
             return valueSecond[row]
         default:
-            print("No component with number \(component)")
             return "???"
         }
     }
@@ -117,23 +113,18 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         case 0:
             if pickerView.tag == 0 {
                 self.activeTimeInMinute = Int(valueMinute[row])!
-                print("activeTimeInMinute \(valueMinute[row])")
             } else if pickerView.tag == 1 {
                 self.restTimeInMinute = Int(valueMinute[row])!
-                print("restTimeInMinute \(valueMinute[row])")
             }
 
         case 1:
             if pickerView.tag == 0 {
                 self.activeTimeInSecond = Int(valueSecond[row])!
-                print("self.minute -0- \(valueSecond[row])")
             } else if pickerView.tag == 1 {
                 self.restTimeInSecond = Int(valueSecond[row])!
-                print("self.minute -1- \(valueSecond[row])")
             }
+        default: break
 
-        default:
-            print("No component with number \(component)")
         }
     }
     
@@ -146,7 +137,6 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
             
             var intervalWorkoutList = [IntervalWorkout]()
             if let data = UserDefaults().object(forKey: "intervalWorkoutList") as? NSData {
-                print("previous list")//Maybe not useful ??
                 intervalWorkoutList = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [IntervalWorkout]
                 intervalWorkoutList.append(
                     IntervalWorkout.init(activeValue: Double(Int(Int(activeTimeInMinute * 60) + activeTimeInSecond)),
@@ -157,7 +147,6 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
                 let data = NSKeyedArchiver.archivedData(withRootObject: intervalWorkoutList)
                 UserDefaults().set(data, forKey: "intervalWorkoutList")
             } else {
-                print("create a new list")
                 intervalWorkoutList.append(
                     IntervalWorkout.init(activeValue: Double(Int(Int(activeTimeInMinute * 60) + activeTimeInSecond)),
                                          restValue: Double(Int(Int(restTimeInMinute * 60) + restTimeInSecond)),
