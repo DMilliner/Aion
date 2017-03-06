@@ -42,8 +42,15 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.tintColor = UIColor.orange
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
-
+        
+        
+//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIImage(named: "ActiveBackground")?.draw(in: self.view.bounds)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        self.view.backgroundColor = UIColor(patternImage: image)
+        
         navigationItem.title = valueTitle
 
         activeCounter = valueActive
@@ -77,6 +84,13 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        if UIDevice.current.orientation.isLandscape {
+            print(" UIDevice Landscape")
+        } else if UIDevice.current.orientation.isPortrait {
+            print(" UIDevice Portrait")
+        }
+        
 //        UIApplication.shared.applicationIconBadgeNumber = 0
 //        UIApplication.shared.cancelAllLocalNotifications()
     }
@@ -84,6 +98,14 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
 
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.orientation.isLandscape {
+            print(" UIDevice Landscape")
+        } else if UIDevice.current.orientation.isPortrait {
+            print(" UIDevice Portrait")
+        }
     }
     
     func appMovedToBackground() {
@@ -153,8 +175,13 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     func updateActiveCounter() {
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
-
+//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIImage(named: "ActiveBackground")?.draw(in: self.view.bounds)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        self.view.backgroundColor = UIColor(patternImage: image)
+        
         if activeCounter >= 0.10 {
             let timeString = String(format: "%.2f", activeCounter)
             timeValueLabel.text = timeString
@@ -172,7 +199,13 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
                 restTimer?.fire()
             } else {
-                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
+//                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
+                UIGraphicsBeginImageContext(self.view.frame.size)
+                UIImage(named: "DoneBackground")?.draw(in: self.view.bounds)
+                let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+                UIGraphicsEndImageContext()
+                self.view.backgroundColor = UIColor(patternImage: image)
+                
                 restTimer?.invalidate()
                 activeTimer?.invalidate()
                 timeValueLabel.text = "Done"
@@ -185,8 +218,13 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     func updateRestCounter() {
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
-
+//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIImage(named: "RestBackground")?.draw(in: self.view.bounds)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        self.view.backgroundColor = UIColor(patternImage: image)
+        
         if restCounter >= 0.10 {
             let timeString = String(format: "%.2f", restCounter)
             timeValueLabel.text = timeString
@@ -225,7 +263,12 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
 
         timeValueLabel.text = valueActive.description
         
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
+//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIImage(named: "ActiveBackground")?.draw(in: self.view.bounds)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        self.view.backgroundColor = UIColor(patternImage: image)
         
         startButton.setTitle("Start", for: .normal)
         startButton.setTitleColor(UIColor.green, for: .normal)
