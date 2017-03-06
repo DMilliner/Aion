@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C4DCC281E6D54D200355B7C /* CircularLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4DCC271E6D54D200355B7C /* CircularLoaderView.swift */; };
 		0CB796C41E672635008D2801 /* WorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB796C31E672635008D2801 /* WorkoutTableViewCell.swift */; };
 		0CF649A61E5DCC3E00A4FB73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF649A51E5DCC3E00A4FB73 /* AppDelegate.swift */; };
 		0CF649A81E5DCC3E00A4FB73 /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF649A71E5DCC3E00A4FB73 /* TimerViewController.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C4DCC271E6D54D200355B7C /* CircularLoaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularLoaderView.swift; sourceTree = "<group>"; };
 		0CB796C31E672635008D2801 /* WorkoutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		0CF649A21E5DCC3E00A4FB73 /* intervalClock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = intervalClock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CF649A51E5DCC3E00A4FB73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				0CF649D51E5EEFA000A4FB73 /* IntervalWorkout.swift */,
 				0CF649D71E5F0DC300A4FB73 /* CustomWorkoutViewController.swift */,
 				0CB796C31E672635008D2801 /* WorkoutTableViewCell.swift */,
+				0C4DCC271E6D54D200355B7C /* CircularLoaderView.swift */,
 			);
 			path = intervalClock;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				0CB796C41E672635008D2801 /* WorkoutTableViewCell.swift in Sources */,
 				0CF649A81E5DCC3E00A4FB73 /* TimerViewController.swift in Sources */,
 				0CF649D41E5DE4A500A4FB73 /* TableViewController.swift in Sources */,
+				0C4DCC281E6D54D200355B7C /* CircularLoaderView.swift in Sources */,
 				0CF649A61E5DCC3E00A4FB73 /* AppDelegate.swift in Sources */,
 				0CF649D81E5F0DC300A4FB73 /* CustomWorkoutViewController.swift in Sources */,
 			);

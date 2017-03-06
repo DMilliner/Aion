@@ -97,8 +97,8 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
     func makeValueReadable(_ stringActiveValue: String)->String{
         
         let IntValueFromString:Int = Int(stringActiveValue)!
-        let valueInMinute = (IntValueFromString % 3600) / 60
-        let valueInSecond = (IntValueFromString % 3600) % 60
+        let valueInMinute = (IntValueFromString % 3720) / 60
+        let valueInSecond = (IntValueFromString % 3720) % 60
         if (valueInMinute == 0){
             return valueInSecond.description + "s"
         } else if (valueInSecond == 0){
@@ -143,7 +143,7 @@ class TableViewController: UIViewController, UINavigationControllerDelegate, UIT
         cell.cellTitle.minimumScaleFactor = 0.2
         cell.cellTitle.numberOfLines = 0
         
-        cell.imageOne.image = UIImage(named: "Run")
+        cell.imageOne.image = UIImage(named: "Hot")
         cell.cellSubTitleOne.adjustsFontSizeToFitWidth = true
         cell.cellSubTitleOne.minimumScaleFactor = 0.2
         cell.cellSubTitleOne.numberOfLines = 0

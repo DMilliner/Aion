@@ -59,16 +59,15 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         nameField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
         startWorkout.layer.borderWidth = 2
         startWorkout.layer.borderColor = UIColor.green.cgColor
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CustomWorkoutViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
 
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        self.nameField.resignFirstResponder()
-//        self.roundsField.resignFirstResponder()
-
-        self.customView.endEditing(true)
-
-        return true
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     func didChangeText(textField:UITextField) {
@@ -109,6 +108,9 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        view.endEditing(true)
+        
         switch component {
         case 0:
             if pickerView.tag == 0 {

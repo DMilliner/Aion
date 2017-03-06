@@ -27,11 +27,14 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     var valueTitle: String = ""
     var running:Bool = false
+    var isDone:Bool = false
     var pausedDuringRestTime:Bool = false
     var currentRoundsValue: Int = 0
 
     weak var activeTimer: Timer?
     weak var restTimer: Timer?
+    
+//    var progressIndicatorView: CircularLoaderView?
 
     var window: UIWindow?
 
@@ -49,7 +52,18 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         
         workoutProgress.progress = 0
         workoutProgress.transform = workoutProgress.transform.scaledBy(x: 1, y: 16)
+        
+//        progressIndicatorView = CircularLoaderView(frame: CGRect.zero)
+//        self.view.addSubview(progressIndicatorView!)
+//        progressIndicatorView?.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: self.view.frame.width, height: self.view.frame.width)
+//        progressIndicatorView?.isUserInteractionEnabled = true
+//        progressIndicatorView?.center = self.view.center
+//        progressIndicatorView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
         timeValueLabel.text =  String(format: "%.2f", valueActive)
+        timeValueLabel.adjustsFontSizeToFitWidth = true
+        timeValueLabel.minimumScaleFactor = 0.5
+        timeValueLabel.numberOfLines = 1
         
         startButton.layer.borderWidth = 2
         startButton.layer.borderColor = UIColor.green.cgColor
@@ -74,6 +88,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     func appMovedToBackground() {
         print("App moved to background!")
+        
+        if running {
+            startButton.sendActions(for: .touchUpInside)
+        }
 //        if (activeTimer != nil) {
 //            if(activeTimer?.isValid)!{
 //                print("Active timer is running...")
@@ -141,6 +159,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             let timeString = String(format: "%.2f", activeCounter)
             timeValueLabel.text = timeString
             activeCounter -= 0.05
+            
         } else {
             roundsMax -= 1
             if roundsMax > 0{
@@ -157,7 +176,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 restTimer?.invalidate()
                 activeTimer?.invalidate()
                 timeValueLabel.text = "Done"
+                startButton.setTitle("Start", for: .normal)
+                isDone = true
                 workoutProgress.progress = 100
+//                progressIndicatorView?.progress = 1
             }
         }
     }
@@ -169,17 +191,18 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             let timeString = String(format: "%.2f", restCounter)
             timeValueLabel.text = timeString
             restCounter -= 0.05
-
+            
         } else {
             activeCounter = valueActive
             currentRoundsValue += 1
             print("Rounds \(currentRoundsValue)")
 
             workoutProgress.progress = Float(Double(currentRoundsValue)/Double(valueRounds))
+//            self.progressIndicatorView?.progress = CGFloat(currentRoundsValue)/CGFloat(valueRounds)
             restTimer?.invalidate()
             
-            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-            AudioServicesPlaySystemSound (1258)
+//            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+//            AudioServicesPlaySystemSound (1258)
 
             activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
             activeTimer?.fire()
@@ -187,7 +210,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func backToTableView(_ sender: UIButton){
-        print("Done")
         restTimer?.invalidate()
         activeTimer?.invalidate()
     }
@@ -199,6 +221,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         roundsMax = valueRounds
         currentRoundsValue = 0
         workoutProgress.progress = 0
+//        progressIndicatorView?.progress = 0
+
         timeValueLabel.text = valueActive.description
         
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
@@ -209,8 +233,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         startButton.layer.borderWidth = 2
         startButton.layer.borderColor = UIColor.green.cgColor
         pausedDuringRestTime = false
-        running = false
         
+        running = false
+        isDone = false
+
         activeTimer?.invalidate()
         restTimer?.invalidate()
 
@@ -218,38 +244,49 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     @IBAction func pressedStart(_ sender: UIButton){
         print("Start // Pause")
-
-        if running == false {
+        if isDone == false {
+            if running == false {
+                startButton.setTitle("Pause", for: .normal)
+                startButton.setTitleColor(UIColor.green, for: .normal)
+                startButton.backgroundColor = UIColor.init(red: 0, green: 144/255, blue: 0, alpha: 0.42)
+                startButton.layer.borderWidth = 2
+                startButton.layer.borderColor = UIColor.green.cgColor
+                running = true
+                
+                if pausedDuringRestTime {
+                    restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
+                    restTimer?.fire()
+                    pausedDuringRestTime = false
+                } else {
+                    activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
+                    activeTimer?.fire()
+                }
+                
+            } else {
+                startButton.setTitle("Resume", for: .normal)
+                startButton.setTitleColor(UIColor.orange, for: .normal)
+                startButton.backgroundColor = UIColor.init(red: 144/255, green: 72/255, blue: 0, alpha: 0.42)
+                startButton.layer.borderWidth = 2
+                startButton.layer.borderColor = UIColor.orange.cgColor
+                running = false
+                
+                if activeTimer != nil && restTimer == nil {
+                    activeTimer?.invalidate()
+                } else if activeTimer == nil && restTimer != nil{
+                    restTimer?.invalidate()
+                    pausedDuringRestTime = true
+                }
+            }
+        } else {
+            resetButton.sendActions(for: .touchUpInside)
             startButton.setTitle("Pause", for: .normal)
             startButton.setTitleColor(UIColor.green, for: .normal)
             startButton.backgroundColor = UIColor.init(red: 0, green: 144/255, blue: 0, alpha: 0.42)
             startButton.layer.borderWidth = 2
             startButton.layer.borderColor = UIColor.green.cgColor
             running = true
-
-            if pausedDuringRestTime {
-                restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
-                restTimer?.fire()
-                pausedDuringRestTime = false
-            } else {
-                activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
-                activeTimer?.fire()
-            }
-
-        } else {
-            startButton.setTitle("Resume", for: .normal)
-            startButton.setTitleColor(UIColor.orange, for: .normal)
-            startButton.backgroundColor = UIColor.init(red: 144/255, green: 72/255, blue: 0, alpha: 0.42)
-            startButton.layer.borderWidth = 2
-            startButton.layer.borderColor = UIColor.orange.cgColor
-            running = false
-
-            if activeTimer != nil && restTimer == nil {
-                activeTimer?.invalidate()
-            } else if activeTimer == nil && restTimer != nil{
-                restTimer?.invalidate()
-                pausedDuringRestTime = true
-            }
+            activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
+            activeTimer?.fire()
         }
     }
 }
