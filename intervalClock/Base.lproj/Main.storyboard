@@ -380,13 +380,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="d8j-lB-czi">
-                                <rect key="frame" x="8" y="367.66666666666669" width="398" height="1"/>
+                                <rect key="frame" x="8" y="368.33333333333331" width="398" height="1"/>
                                 <color key="tintColor" red="0.19740125868055555" green="0.58721245659722221" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="a7r-uq-UgV"/>
                                 </constraints>
-                                <color key="progressTintColor" red="0.13712565099999999" green="0.41015625" blue="0.48977322049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="trackTintColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="progressTintColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="trackTintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="80"/>
@@ -432,7 +432,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Done" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lks-YB-RQ2">
-                                <rect key="frame" x="32" y="376.66666666666674" width="350" height="119.33333333333331"/>
+                                <rect key="frame" x="64" y="309.33333333333331" width="286" height="119"/>
                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="100"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="highlightedColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -440,6 +440,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="lks-YB-RQ2" firstAttribute="centerY" secondItem="d8j-lB-czi" secondAttribute="centerY" id="01L-9o-d48"/>
                             <constraint firstItem="xbh-eM-cJE" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="16" id="At8-0j-6vC"/>
                             <constraint firstItem="xbh-eM-cJE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="32" id="BHe-1W-bZG"/>
                             <constraint firstItem="d8j-lB-czi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Byi-YP-2RU"/>
@@ -447,9 +448,8 @@
                             <constraint firstItem="d8j-lB-czi" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Iuw-Am-MYV"/>
                             <constraint firstItem="Djj-XT-tQl" firstAttribute="baseline" secondItem="xbh-eM-cJE" secondAttribute="baseline" id="Kup-pV-xkf"/>
                             <constraint firstAttribute="trailing" secondItem="Djj-XT-tQl" secondAttribute="trailing" constant="32" id="QRY-3N-aYC"/>
-                            <constraint firstAttribute="trailing" secondItem="lks-YB-RQ2" secondAttribute="trailing" constant="32" id="QvG-kG-Lcq"/>
-                            <constraint firstItem="lks-YB-RQ2" firstAttribute="top" secondItem="d8j-lB-czi" secondAttribute="bottom" constant="8" id="Sd4-9V-xYh"/>
-                            <constraint firstItem="lks-YB-RQ2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="32" id="YCk-75-vgD"/>
+                            <constraint firstAttribute="trailing" secondItem="lks-YB-RQ2" secondAttribute="trailing" constant="64" id="QvG-kG-Lcq"/>
+                            <constraint firstItem="lks-YB-RQ2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="64" id="YCk-75-vgD"/>
                             <constraint firstAttribute="trailing" secondItem="d8j-lB-czi" secondAttribute="trailing" constant="8" id="eWR-yO-EWS"/>
                             <constraint firstItem="d8j-lB-czi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="zV5-Kh-pEf"/>
                         </constraints>
@@ -473,7 +473,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <exit id="bNE-NP-Y4c" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1567.5" y="-4400.625"/>
+            <point key="canvasLocation" x="1568" y="-1003"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r0R-az-1iN">

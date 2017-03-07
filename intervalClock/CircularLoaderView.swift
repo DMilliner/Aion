@@ -25,17 +25,25 @@ class CircularLoaderView: UIView {
     }
     
     func configure() {
-        circlePathLayer.frame = bounds
-        circlePathLayer.lineWidth = 16
+        if(bounds.height > bounds.width){
+            print("h>w")
+            circlePathLayer.frame = CGRect(x: 0, y: 0, width: bounds.width-16, height: bounds.width-16)
+        } else {
+            print("w>h")
+            circlePathLayer.frame = CGRect(x: 0, y: 0, width: bounds.height-16, height: bounds.height-16)
+        }
+        circlePathLayer.lineWidth = 14
         circlePathLayer.fillColor = UIColor.clear.cgColor
-        circlePathLayer.strokeColor = UIColor.red.cgColor
+        circlePathLayer.strokeColor = UIColor.white.cgColor
+        circlePathLayer.borderColor = UIColor.lightGray.cgColor
+        circlePathLayer.borderWidth = 2
         layer.addSublayer(circlePathLayer)
         backgroundColor = UIColor.clear
         progress = 0
     }
     
     func circleFrame() -> CGRect {
-        var circleFrame = CGRect(x: 0, y: 0, width: 2*circleRadius, height: 2*circleRadius)
+        var circleFrame = CGRect(x: 0, y: 0, width: bounds.width-16, height: bounds.width-16)
         circleFrame.origin.x = circlePathLayer.bounds.midX - circleFrame.midX
         circleFrame.origin.y = circlePathLayer.bounds.midY - circleFrame.midY
         return circleFrame
@@ -56,7 +64,6 @@ class CircularLoaderView: UIView {
             return circlePathLayer.strokeEnd
         }
         set {
-            print("setProgress \(newValue)")
             circlePathLayer.strokeEnd = newValue > 1 ? 1 : newValue < 0 ? 0 : newValue
         }
     }

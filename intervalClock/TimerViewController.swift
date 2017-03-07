@@ -34,7 +34,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     weak var activeTimer: Timer?
     weak var restTimer: Timer?
     
-//    var progressIndicatorView: CircularLoaderView?
+    var progressIndicatorView: CircularLoaderView?
+    var valWidth: Int = 0
 
     var window: UIWindow?
 
@@ -59,13 +60,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         
         workoutProgress.progress = 0
         workoutProgress.transform = workoutProgress.transform.scaledBy(x: 1, y: 16)
-        
-//        progressIndicatorView = CircularLoaderView(frame: CGRect.zero)
-//        self.view.addSubview(progressIndicatorView!)
-//        progressIndicatorView?.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: self.view.frame.width, height: self.view.frame.width)
-//        progressIndicatorView?.isUserInteractionEnabled = true
-//        progressIndicatorView?.center = self.view.center
-//        progressIndicatorView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        workoutProgress.isHidden = true
         
         timeValueLabel.text =  String(format: "%.2f", valueActive)
         timeValueLabel.adjustsFontSizeToFitWidth = true
@@ -77,6 +72,23 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         resetButton.layer.borderWidth = 2
         resetButton.layer.borderColor = UIColor.white.cgColor
         
+        
+        if( self.view.frame.height >  self.view.frame.width){
+            valWidth = Int(CGFloat(self.view.frame.width-16))
+        } else {
+            valWidth = Int(CGFloat(self.view.frame.height-16))
+        }
+        
+        progressIndicatorView = CircularLoaderView(frame: CGRect.zero)
+        self.view.addSubview(progressIndicatorView!)
+        progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
+        progressIndicatorView?.isUserInteractionEnabled = true
+        progressIndicatorView?.center = self.view.center
+//        progressIndicatorView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        progressIndicatorView?.autoresizesSubviews = true
+
+        self.view.sendSubview(toBack: progressIndicatorView!)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
 
     }
@@ -85,11 +97,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         super.viewWillAppear(true)
         UIApplication.shared.isIdleTimerDisabled = true
         
-        if UIDevice.current.orientation.isLandscape {
-            print(" UIDevice Landscape")
-        } else if UIDevice.current.orientation.isPortrait {
-            print(" UIDevice Portrait")
-        }
+        //Simulator Test
+//        startButton.sendActions(for: .touchUpInside)
         
 //        UIApplication.shared.applicationIconBadgeNumber = 0
 //        UIApplication.shared.cancelAllLocalNotifications()
@@ -101,10 +110,30 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        
         if UIDevice.current.orientation.isLandscape {
             print(" UIDevice Landscape")
+            if( self.view.frame.height >  self.view.frame.width){
+                valWidth = Int(CGFloat(self.view.frame.width-16))
+            } else {
+                valWidth = Int(CGFloat(self.view.frame.height-16))
+            }
+            
+            progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
+            progressIndicatorView?.autoresizesSubviews = true
+
+            
         } else if UIDevice.current.orientation.isPortrait {
             print(" UIDevice Portrait")
+            if( self.view.frame.height >  self.view.frame.width){
+                valWidth = Int(CGFloat(self.view.frame.width-16))
+            } else {
+                valWidth = Int(CGFloat(self.view.frame.height-16))
+            }
+            progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
+            progressIndicatorView?.autoresizesSubviews = true
+
+            
         }
     }
     
@@ -212,7 +241,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 startButton.setTitle("Start", for: .normal)
                 isDone = true
                 workoutProgress.progress = 100
-//                progressIndicatorView?.progress = 1
+                progressIndicatorView?.progress = 1
             }
         }
     }
@@ -236,7 +265,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             print("Rounds \(currentRoundsValue)")
 
             workoutProgress.progress = Float(Double(currentRoundsValue)/Double(valueRounds))
-//            self.progressIndicatorView?.progress = CGFloat(currentRoundsValue)/CGFloat(valueRounds)
+            progressIndicatorView?.progress = CGFloat(currentRoundsValue)/CGFloat(valueRounds)
             restTimer?.invalidate()
             
 //            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -259,7 +288,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         roundsMax = valueRounds
         currentRoundsValue = 0
         workoutProgress.progress = 0
-//        progressIndicatorView?.progress = 0
+        progressIndicatorView?.progress = 0
 
         timeValueLabel.text = valueActive.description
         
