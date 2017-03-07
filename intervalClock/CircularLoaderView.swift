@@ -12,7 +12,6 @@ import UIKit
 class CircularLoaderView: UIView {
     
     let circlePathLayer = CAShapeLayer()
-    let circleRadius: CGFloat = 150.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,17 +25,15 @@ class CircularLoaderView: UIView {
     
     func configure() {
         if(bounds.height > bounds.width){
-            print("h>w")
             circlePathLayer.frame = CGRect(x: 0, y: 0, width: bounds.width-16, height: bounds.width-16)
         } else {
-            print("w>h")
             circlePathLayer.frame = CGRect(x: 0, y: 0, width: bounds.height-16, height: bounds.height-16)
         }
         circlePathLayer.lineWidth = 14
         circlePathLayer.fillColor = UIColor.clear.cgColor
         circlePathLayer.strokeColor = UIColor.white.cgColor
-        circlePathLayer.borderColor = UIColor.lightGray.cgColor
-        circlePathLayer.borderWidth = 2
+//        circlePathLayer.borderColor = UIColor.lightGray.cgColor
+//        circlePathLayer.borderWidth = 2
         layer.addSublayer(circlePathLayer)
         backgroundColor = UIColor.clear
         progress = 0

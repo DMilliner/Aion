@@ -43,9 +43,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.tintColor = UIColor.orange
-        
-        
-//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
+                
         UIGraphicsBeginImageContext(self.view.frame.size)
         UIImage(named: "ActiveBackground")?.draw(in: self.view.bounds)
         let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -84,7 +82,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
         progressIndicatorView?.isUserInteractionEnabled = true
         progressIndicatorView?.center = self.view.center
-//        progressIndicatorView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         progressIndicatorView?.autoresizesSubviews = true
 
         self.view.sendSubview(toBack: progressIndicatorView!)
@@ -121,7 +118,20 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             
             progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
             progressIndicatorView?.autoresizesSubviews = true
-
+            
+            if pausedDuringRestTime {
+                print("pausedDuringRestTime")
+                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
+                
+            } else if isDone {
+                print("isDone")
+                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
+                
+            } else {
+                print("pausedDuringActiveTime")
+                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
+                
+            }
             
         } else if UIDevice.current.orientation.isPortrait {
             print(" UIDevice Portrait")
@@ -132,8 +142,20 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             }
             progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
             progressIndicatorView?.autoresizesSubviews = true
-
             
+            if pausedDuringRestTime {
+                print("pausedDuringRestTime")
+                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
+
+            } else if isDone {
+                print("isDone")
+                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
+
+            } else {
+                print("pausedDuringActiveTime")
+                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
+
+            }
         }
     }
     
