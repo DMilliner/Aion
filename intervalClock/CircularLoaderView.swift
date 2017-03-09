@@ -24,11 +24,7 @@ class CircularLoaderView: UIView {
     }
     
     func configure() {
-        if(bounds.height > bounds.width){
-            circlePathLayer.frame = CGRect(x: 0, y: 0, width: bounds.width-16, height: bounds.width-16)
-        } else {
-            circlePathLayer.frame = CGRect(x: 0, y: 0, width: bounds.height-16, height: bounds.height-16)
-        }
+        circlePathLayer.frame = bounds
         circlePathLayer.lineWidth = 14
         circlePathLayer.fillColor = UIColor.clear.cgColor
         circlePathLayer.strokeColor = UIColor.white.cgColor
@@ -40,7 +36,7 @@ class CircularLoaderView: UIView {
     }
     
     func circleFrame() -> CGRect {
-        var circleFrame = CGRect(x: 0, y: 0, width: bounds.width-16, height: bounds.width-16)
+        var circleFrame = CGRect(x: 0, y: 0, width: bounds.width - 16, height: bounds.width - 16)
         circleFrame.origin.x = circlePathLayer.bounds.midX - circleFrame.midX
         circleFrame.origin.y = circlePathLayer.bounds.midY - circleFrame.midY
         return circleFrame

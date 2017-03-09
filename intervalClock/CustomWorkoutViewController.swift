@@ -58,7 +58,9 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         roundsField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
         nameField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
         startWorkout.layer.borderWidth = 2
-        startWorkout.layer.borderColor = UIColor.green.cgColor
+        startWorkout.layer.borderColor = UIColor.red.cgColor
+        startWorkout.backgroundColor = UIColor(red: 144/255, green: 0, blue: 0, alpha: 0.42)
+        startWorkout.setTitleColor(UIColor.red, for: .normal)
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CustomWorkoutViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -71,8 +73,18 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     }
     
     func didChangeText(textField:UITextField) {
-        if(!(roundsField.text?.isEmpty)! && !(nameField.text?.isEmpty)!){
+        if(!(roundsField.text?.isEmpty)!
+            && !(nameField.text?.isEmpty)!){
             startWorkout.isEnabled = true
+            startWorkout.layer.borderColor = UIColor.green.cgColor
+            startWorkout.backgroundColor = UIColor(red: 0, green: 144/255, blue: 0, alpha: 0.42)
+            startWorkout.setTitleColor(UIColor.green, for: .normal)
+        } else {
+            print("Here")
+            startWorkout.isEnabled = false
+            startWorkout.layer.borderColor = UIColor.red.cgColor
+            startWorkout.backgroundColor = UIColor(red: 144/255, green: 0, blue: 0, alpha: 0.42)
+            startWorkout.setTitleColor(UIColor.red, for: .normal)
         }
     }
 
@@ -131,9 +143,10 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     }
     
     @IBAction func startCustomizedWorkout(sender: UIButton) {
-        startWorkout.isEnabled = false
         
-        if(!(roundsField.text?.isEmpty)! && !(nameField.text?.isEmpty)!){
+        if(!(roundsField.text?.isEmpty)!
+            && !(nameField.text?.isEmpty)!
+            && (Int(activeTimeInMinute * 60) + activeTimeInSecond) + (Int(restTimeInMinute * 60) + restTimeInSecond) != 0){
             
             //Save the new workout in the list that will build the tableView
             
@@ -165,6 +178,11 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
             timerViewController.valueRounds = Int(roundsField.text!)!
             timerViewController.valueTitle = nameField.text!
             self.navigationController?.setViewControllers([timerViewController], animated: true)
+        } else {
+            view.endEditing(true)
+            let alert = UIAlertController(title: "Erreur", message: "You need to set your active time interval to start.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }
