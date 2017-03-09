@@ -36,7 +36,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     var progressIndicatorView: CircularLoaderView?
     var valWidth: Int = 0
-
+    
+    var progressTotal: Int = 0
+    var progressValue: Double = 0.0
+    
     var window: UIWindow?
 
     override func viewDidLoad() {
@@ -87,6 +90,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         self.view.sendSubview(toBack: progressIndicatorView!)
         
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+        
+        progressTotal = (Int(valueRounds) * Int(valueActive)) + (Int(valueRounds - 1) * Int(valueRest))
 
     }
     
@@ -237,6 +242,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             let timeString = String(format: "%.2f", activeCounter)
             timeValueLabel.text = timeString
             activeCounter -= 0.05
+
+            progressValue += 0.05
+            progressIndicatorView?.progress = CGFloat(progressValue)/CGFloat(progressTotal)
             
         } else {
             roundsMax -= 1
@@ -281,13 +289,17 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             timeValueLabel.text = timeString
             restCounter -= 0.05
             
+            progressValue += 0.05
+            progressIndicatorView?.progress = CGFloat(progressValue)/CGFloat(progressTotal)
+            
         } else {
             activeCounter = valueActive
             currentRoundsValue += 1
             print("Rounds \(currentRoundsValue)")
-
-            workoutProgress.progress = Float(Double(currentRoundsValue)/Double(valueRounds))
-            progressIndicatorView?.progress = CGFloat(currentRoundsValue)/CGFloat(valueRounds)
+            
+//            workoutProgress.progress = Float(Double(currentRoundsValue)/Double(valueRounds))
+//            progressIndicatorView?.progress = CGFloat(currentRoundsValue)/CGFloat(valueRounds)
+            
             restTimer?.invalidate()
             
 //            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -311,7 +323,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         currentRoundsValue = 0
         workoutProgress.progress = 0
         progressIndicatorView?.progress = 0
-
+        progressValue = 0.0
         timeValueLabel.text = valueActive.description
         
 //        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
