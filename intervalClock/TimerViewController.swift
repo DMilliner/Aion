@@ -15,7 +15,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var timeValueLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var startButton: UIButton!
-    @IBOutlet weak var workoutProgress: UIProgressView!
+//    @IBOutlet weak var workoutProgress: UIProgressView!
 
     var activeCounter: Double = 0.0
     var restCounter: Double = 0.0
@@ -59,13 +59,13 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         restCounter = valueRest
         roundsMax = valueRounds
         
-        workoutProgress.progress = 0
-        workoutProgress.transform = workoutProgress.transform.scaledBy(x: 1, y: 16)
-        workoutProgress.isHidden = true
+//        workoutProgress.progress = 0
+//        workoutProgress.transform = workoutProgress.transform.scaledBy(x: 1, y: 16)
+//        workoutProgress.isHidden = true
         
-        timeValueLabel.text =  String(format: "%.2f", valueActive)
+        timeValueLabel.text = makeValueReadable(valueActive)
         timeValueLabel.adjustsFontSizeToFitWidth = true
-        timeValueLabel.minimumScaleFactor = 0.5
+//        timeValueLabel.minimumScaleFactor = 0.5
         timeValueLabel.numberOfLines = 1
         
         startButton.layer.borderWidth = 2
@@ -92,6 +92,28 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
         
         progressTotal = (Int(valueRounds) * Int(valueActive)) + (Int(valueRounds - 1) * Int(valueRest))
+
+    }
+    
+    func makeValueReadable(_ stringActiveValue: Double)->String{
+        let valueInMinute = Int(stringActiveValue.truncatingRemainder(dividingBy: 3720)/60)
+        let valueInMinuteString =  String(format: "%02d", valueInMinute)
+
+        let valueInSecond = stringActiveValue.truncatingRemainder(dividingBy: 3720).truncatingRemainder(dividingBy: 60)
+        let valueInSecondString =  String(format: "%02d", Int(valueInSecond))
+        
+        let numberOfPlaces:Double = 2.0
+        let powerOfTen:Double = pow(10.0, numberOfPlaces)
+        let targetedDecimalPlaces:Double = round((valueInSecond.truncatingRemainder(dividingBy: 1.0)) * powerOfTen)
+        var valueInMilliSecondString = ""
+        if(targetedDecimalPlaces == 100){
+            valueInMilliSecondString = "00"
+        } else {
+            valueInMilliSecondString =  String(format: "%02d", Int(targetedDecimalPlaces))
+        }
+
+//        print("\(valueInMinuteString):\(valueInSecondString).\(valueInMilliSecondString)")
+        return valueInMinuteString + ":" + valueInSecondString + "." + valueInMilliSecondString
 
     }
     
@@ -239,8 +261,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         self.view.backgroundColor = UIColor(patternImage: image)
         
         if activeCounter >= 0.10 {
-            let timeString = String(format: "%.2f", activeCounter)
-            timeValueLabel.text = timeString
+//            let timeString = String(format: "%.2f", activeCounter)
+            timeValueLabel.text = makeValueReadable(activeCounter)
             activeCounter -= 0.05
 
             progressValue += 0.05
@@ -270,7 +292,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 timeValueLabel.text = "Done"
                 startButton.setTitle("Start", for: .normal)
                 isDone = true
-                workoutProgress.progress = 100
+//                workoutProgress.progress = 100
                 progressIndicatorView?.progress = 1
             }
         }
@@ -285,8 +307,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         self.view.backgroundColor = UIColor(patternImage: image)
         
         if restCounter >= 0.10 {
-            let timeString = String(format: "%.2f", restCounter)
-            timeValueLabel.text = timeString
+//            let timeString = String(format: "%.2f", restCounter)
+            timeValueLabel.text = makeValueReadable(restCounter)
             restCounter -= 0.05
             
             progressValue += 0.05
@@ -317,14 +339,18 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     @IBAction func pressedReset(_ sender: UIButton){
         print("Reset")
+        
+        activeTimer?.invalidate()
+        restTimer?.invalidate()
+        
         activeCounter = valueActive
         restCounter = valueRest
         roundsMax = valueRounds
         currentRoundsValue = 0
-        workoutProgress.progress = 0
+//        workoutProgress.progress = 0
         progressIndicatorView?.progress = 0
         progressValue = 0.0
-        timeValueLabel.text = valueActive.description
+        timeValueLabel.text = makeValueReadable(valueActive)
         
 //        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -342,10 +368,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         
         running = false
         isDone = false
-
-        activeTimer?.invalidate()
-        restTimer?.invalidate()
-
     }
     
     @IBAction func pressedStart(_ sender: UIButton){
