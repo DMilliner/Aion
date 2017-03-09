@@ -15,7 +15,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var timeValueLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var startButton: UIButton!
-//    @IBOutlet weak var workoutProgress: UIProgressView!
 
     var activeCounter: Double = 0.0
     var restCounter: Double = 0.0
@@ -59,13 +58,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         restCounter = valueRest
         roundsMax = valueRounds
         
-//        workoutProgress.progress = 0
-//        workoutProgress.transform = workoutProgress.transform.scaledBy(x: 1, y: 16)
-//        workoutProgress.isHidden = true
-        
         timeValueLabel.text = makeValueReadable(valueActive)
         timeValueLabel.adjustsFontSizeToFitWidth = true
-//        timeValueLabel.minimumScaleFactor = 0.5
         timeValueLabel.numberOfLines = 1
         
         startButton.layer.borderWidth = 2
@@ -112,7 +106,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             valueInMilliSecondString =  String(format: "%02d", Int(targetedDecimalPlaces))
         }
 
-//        print("\(valueInMinuteString):\(valueInSecondString).\(valueInMilliSecondString)")
         return valueInMinuteString + ":" + valueInSecondString + "." + valueInMilliSecondString
 
     }
@@ -136,7 +129,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
         if UIDevice.current.orientation.isLandscape {
-            print(" UIDevice Landscape")
+            print("UIDevice Landscape")
             if( self.view.frame.height >  self.view.frame.width){
                 valWidth = Int(CGFloat(self.view.frame.width-16))
             } else {
@@ -155,9 +148,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
                 
             } else {
-                print("pausedDuringActiveTime")
+                print("pausedDuringActiveTime or not paused actually...")
                 self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
-                
             }
             
         } else if UIDevice.current.orientation.isPortrait {
@@ -253,7 +245,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     func updateActiveCounter() {
-//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
         UIGraphicsBeginImageContext(self.view.frame.size)
         UIImage(named: "ActiveBackground")?.draw(in: self.view.bounds)
         let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -261,7 +252,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         self.view.backgroundColor = UIColor(patternImage: image)
         
         if activeCounter >= 0.10 {
-//            let timeString = String(format: "%.2f", activeCounter)
             timeValueLabel.text = makeValueReadable(activeCounter)
             activeCounter -= 0.05
 
@@ -274,13 +264,14 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 restCounter = valueRest
                 activeTimer?.invalidate()
                 
-//                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-//                AudioServicesPlaySystemSound (1257)
                 
+                print("-- isOtherAudioPlaying \(AVAudioSession.sharedInstance().isOtherAudioPlaying)")
+                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+//                AudioServicesPlaySystemSound(1109)
+
                 restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
                 restTimer?.fire()
             } else {
-//                self.view.backgroundColor = UIColor(patternImage: UIImage(named: "DoneBackground")!)
                 UIGraphicsBeginImageContext(self.view.frame.size)
                 UIImage(named: "DoneBackground")?.draw(in: self.view.bounds)
                 let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -292,14 +283,12 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 timeValueLabel.text = "Done"
                 startButton.setTitle("Start", for: .normal)
                 isDone = true
-//                workoutProgress.progress = 100
                 progressIndicatorView?.progress = 1
             }
         }
     }
     
     func updateRestCounter() {
-//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
         UIGraphicsBeginImageContext(self.view.frame.size)
         UIImage(named: "RestBackground")?.draw(in: self.view.bounds)
         let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -307,7 +296,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         self.view.backgroundColor = UIColor(patternImage: image)
         
         if restCounter >= 0.10 {
-//            let timeString = String(format: "%.2f", restCounter)
             timeValueLabel.text = makeValueReadable(restCounter)
             restCounter -= 0.05
             
@@ -317,16 +305,12 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         } else {
             activeCounter = valueActive
             currentRoundsValue += 1
-            print("Rounds \(currentRoundsValue)")
-            
-//            workoutProgress.progress = Float(Double(currentRoundsValue)/Double(valueRounds))
-//            progressIndicatorView?.progress = CGFloat(currentRoundsValue)/CGFloat(valueRounds)
-            
+
             restTimer?.invalidate()
             
-//            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-//            AudioServicesPlaySystemSound (1258)
-
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+//            AudioServicesPlaySystemSound(1075)
+            
             activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
             activeTimer?.fire()
         }
