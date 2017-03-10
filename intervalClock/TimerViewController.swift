@@ -97,6 +97,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         progressIndicatorViewOther?.isUserInteractionEnabled = true
         progressIndicatorViewOther?.center = self.view.center
         progressIndicatorViewOther?.autoresizesSubviews = true
+        progressIndicatorViewOther?.strokeColoration = UIColor(red: 73/255, green: 23/255, blue: 69/255, alpha: 1)
         self.view.sendSubview(toBack: progressIndicatorViewOther!)
 
     }
@@ -156,7 +157,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
             progressIndicatorView?.autoresizesSubviews = true
             
-            progressIndicatorViewOther?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth-30), height: CGFloat(valWidth-30))
+            progressIndicatorViewOther?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2))+15, y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2))+15, width: CGFloat(valWidth-30), height: CGFloat(valWidth-30))
             progressIndicatorViewOther?.autoresizesSubviews = true
             
             if pausedDuringRestTime {
@@ -182,7 +183,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
             progressIndicatorView?.autoresizesSubviews = true
             
-            progressIndicatorViewOther?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth-30), height: CGFloat(valWidth-30))
+            progressIndicatorViewOther?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2))+15, y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2))+15, width: CGFloat(valWidth-30), height: CGFloat(valWidth-30))
             progressIndicatorViewOther?.autoresizesSubviews = true
             
             if pausedDuringRestTime {

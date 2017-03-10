@@ -60,5 +60,14 @@ class CircularLoaderView: UIView {
             circlePathLayer.strokeEnd = newValue > 1 ? 1 : newValue < 0 ? 0 : newValue
         }
     }
+    
+    var strokeColoration: UIColor {
+        get {
+            return UIColor(cgColor: circlePathLayer.strokeColor!)
+        }
+        set {
+            circlePathLayer.strokeColor = newValue.cgColor
+        }
+    }
 }
 
