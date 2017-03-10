@@ -34,10 +34,15 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     weak var restTimer: Timer?
     
     var progressIndicatorView: CircularLoaderView?
+    var progressIndicatorViewOther: CircularLoaderView?
+
     var valWidth: Int = 0
     
     var progressTotal: Int = 0
     var progressValue: Double = 0.0
+    
+    var progressValueRestOther:Double = 0.0
+    var progressValueActiveOther:Double = 0.0
     
     var window: UIWindow?
 
@@ -80,12 +85,19 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         progressIndicatorView?.isUserInteractionEnabled = true
         progressIndicatorView?.center = self.view.center
         progressIndicatorView?.autoresizesSubviews = true
-
         self.view.sendSubview(toBack: progressIndicatorView!)
         
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
-        
         progressTotal = (Int(valueRounds) * Int(valueActive)) + (Int(valueRounds - 1) * Int(valueRest))
+        
+        
+        progressIndicatorViewOther = CircularLoaderView(frame: CGRect.zero)
+        self.view.addSubview(progressIndicatorViewOther!)
+        progressIndicatorViewOther?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), width: CGFloat(valWidth-30), height: CGFloat(valWidth-30))
+        progressIndicatorViewOther?.isUserInteractionEnabled = true
+        progressIndicatorViewOther?.center = self.view.center
+        progressIndicatorViewOther?.autoresizesSubviews = true
+        self.view.sendSubview(toBack: progressIndicatorViewOther!)
 
     }
     
@@ -123,6 +135,11 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
+        print("viewWillDisappear! -- running ?? \(running)")
+
+        if running {
+            startButton.sendActions(for: .touchUpInside)
+        }
 
     }
     
@@ -138,6 +155,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             
             progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
             progressIndicatorView?.autoresizesSubviews = true
+            
+            progressIndicatorViewOther?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth-30), height: CGFloat(valWidth-30))
+            progressIndicatorViewOther?.autoresizesSubviews = true
             
             if pausedDuringRestTime {
                 print("pausedDuringRestTime")
@@ -162,6 +182,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             progressIndicatorView?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth), height: CGFloat(valWidth))
             progressIndicatorView?.autoresizesSubviews = true
             
+            progressIndicatorViewOther?.frame = CGRect(x: CGFloat(Int(self.view.frame.size.height / 2) - Int(valWidth / 2)), y: CGFloat(Int(self.view.frame.size.width / 2) - Int(valWidth / 2)), width: CGFloat(valWidth-30), height: CGFloat(valWidth-30))
+            progressIndicatorViewOther?.autoresizesSubviews = true
+            
             if pausedDuringRestTime {
                 print("pausedDuringRestTime")
                 self.view.backgroundColor = UIColor(patternImage: UIImage(named: "RestBackground")!)
@@ -179,7 +202,7 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     func appMovedToBackground() {
-        print("App moved to background!")
+        print("App moved to background! -- running ?? \(running)")
         
         if running {
             startButton.sendActions(for: .touchUpInside)
@@ -251,12 +274,18 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         UIGraphicsEndImageContext()
         self.view.backgroundColor = UIColor(patternImage: image)
         
-        if activeCounter >= 0.10 {
+        progressValueRestOther = 0
+
+        
+        if activeCounter >= 0.05 {
             timeValueLabel.text = makeValueReadable(activeCounter)
             activeCounter -= 0.05
 
             progressValue += 0.05
+            progressValueActiveOther += 0.05
             progressIndicatorView?.progress = CGFloat(progressValue)/CGFloat(progressTotal)
+            progressIndicatorViewOther?.progress = CGFloat(progressValueActiveOther)/CGFloat(valueActive)
+
             
         } else {
             roundsMax -= 1
@@ -284,6 +313,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 startButton.setTitle("Start", for: .normal)
                 isDone = true
                 progressIndicatorView?.progress = 1
+                progressIndicatorViewOther?.progress = 1
+
             }
         }
     }
@@ -295,12 +326,17 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         UIGraphicsEndImageContext()
         self.view.backgroundColor = UIColor(patternImage: image)
         
-        if restCounter >= 0.10 {
+        progressValueActiveOther = 0
+        
+        if restCounter >= 0.05 {
             timeValueLabel.text = makeValueReadable(restCounter)
             restCounter -= 0.05
             
             progressValue += 0.05
+            progressValueRestOther += 0.05
             progressIndicatorView?.progress = CGFloat(progressValue)/CGFloat(progressTotal)
+            progressIndicatorViewOther?.progress = CGFloat(progressValueRestOther)/CGFloat(valueRest)
+
             
         } else {
             activeCounter = valueActive
@@ -334,6 +370,11 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
 //        workoutProgress.progress = 0
         progressIndicatorView?.progress = 0
         progressValue = 0.0
+        
+        progressIndicatorViewOther?.progress = 0
+        progressValueRestOther = 0.0
+        progressValueActiveOther = 0.0
+
         timeValueLabel.text = makeValueReadable(valueActive)
         
 //        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
