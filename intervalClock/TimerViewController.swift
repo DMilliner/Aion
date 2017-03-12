@@ -126,17 +126,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         UIApplication.shared.isIdleTimerDisabled = true
-        
-        //Simulator Test
-//        startButton.sendActions(for: .touchUpInside)
-        
-//        UIApplication.shared.applicationIconBadgeNumber = 0
-//        UIApplication.shared.cancelAllLocalNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        print("viewWillDisappear! -- running ?? \(running)")
 
         if running {
             startButton.sendActions(for: .touchUpInside)
@@ -294,10 +287,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 restCounter = valueRest
                 activeTimer?.invalidate()
                 
-                
-                print("-- isOtherAudioPlaying \(AVAudioSession.sharedInstance().isOtherAudioPlaying)")
+//                print("-- isOtherAudioPlaying \(AVAudioSession.sharedInstance().isOtherAudioPlaying)")
+                AudioServicesPlaySystemSound(1072)
                 AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
-//                AudioServicesPlaySystemSound(1109)
 
                 restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
                 restTimer?.fire()
@@ -308,11 +300,16 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 UIGraphicsEndImageContext()
                 self.view.backgroundColor = UIColor(patternImage: image)
                 
+                AudioServicesPlaySystemSound(1070)
+                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+                
                 restTimer?.invalidate()
                 activeTimer?.invalidate()
+                
                 timeValueLabel.text = "Done"
                 startButton.setTitle("Start", for: .normal)
                 isDone = true
+                running = false
                 progressIndicatorView?.progress = 1
                 progressIndicatorViewOther?.progress = 1
 
@@ -345,8 +342,9 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
 
             restTimer?.invalidate()
             
+//            print("-- isOtherAudioPlaying \(AVAudioSession.sharedInstance().isOtherAudioPlaying)")
+            AudioServicesPlaySystemSound(1075)
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
-//            AudioServicesPlaySystemSound(1075)
             
             activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
             activeTimer?.fire()
@@ -361,14 +359,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
     @IBAction func pressedReset(_ sender: UIButton){
         print("Reset")
         
-        activeTimer?.invalidate()
-        restTimer?.invalidate()
-        
         activeCounter = valueActive
         restCounter = valueRest
         roundsMax = valueRounds
         currentRoundsValue = 0
-//        workoutProgress.progress = 0
         progressIndicatorView?.progress = 0
         progressValue = 0.0
         
@@ -378,7 +372,6 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
 
         timeValueLabel.text = makeValueReadable(valueActive)
         
-//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "ActiveBackground")!)
         UIGraphicsBeginImageContext(self.view.frame.size)
         UIImage(named: "ActiveBackground")?.draw(in: self.view.bounds)
         let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -390,8 +383,8 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
         startButton.backgroundColor = UIColor.init(red: 0, green: 144/255, blue: 0, alpha: 0.42)
         startButton.layer.borderWidth = 2
         startButton.layer.borderColor = UIColor.green.cgColor
-        pausedDuringRestTime = false
         
+        pausedDuringRestTime = false
         running = false
         isDone = false
     }
