@@ -117,14 +117,6 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if(textField.tag == 1){
-            if UIDevice.current.orientation.isLandscape {
-                customView.contentOffset.y -= 80
-            }
-        }
-    }
-    
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)

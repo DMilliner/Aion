@@ -285,14 +285,20 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             roundsMax -= 1
             if roundsMax > 0{
                 restCounter = valueRest
-                activeTimer?.invalidate()
+                if activeTimer != nil {
+                    activeTimer?.invalidate()
+                    activeTimer = nil
+                }
                 
 //                print("-- isOtherAudioPlaying \(AVAudioSession.sharedInstance().isOtherAudioPlaying)")
                 AudioServicesPlaySystemSound(1072)
                 AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
 
-                restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
-                restTimer?.fire()
+                if restTimer == nil {
+                    restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
+                    restTimer?.fire()
+                }
+
             } else {
                 UIGraphicsBeginImageContext(self.view.frame.size)
                 UIImage(named: "DoneBackground")?.draw(in: self.view.bounds)
@@ -303,8 +309,15 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 AudioServicesPlaySystemSound(1070)
                 AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
                 
-                restTimer?.invalidate()
-                activeTimer?.invalidate()
+                if activeTimer != nil {
+                    activeTimer?.invalidate()
+                    activeTimer = nil
+                }
+                
+                if restTimer != nil {
+                    restTimer?.invalidate()
+                    restTimer = nil
+                }
                 
                 timeValueLabel.text = "Done"
                 startButton.setTitle("Start", for: .normal)
@@ -340,24 +353,46 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             activeCounter = valueActive
             currentRoundsValue += 1
 
-            restTimer?.invalidate()
+            if restTimer != nil {
+                restTimer?.invalidate()
+                restTimer = nil
+            }
             
 //            print("-- isOtherAudioPlaying \(AVAudioSession.sharedInstance().isOtherAudioPlaying)")
             AudioServicesPlaySystemSound(1075)
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
             
-            activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
-            activeTimer?.fire()
+            if activeTimer == nil {
+                activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
+                activeTimer?.fire()
+            }
         }
     }
     
     @IBAction func backToTableView(_ sender: UIButton){
-        restTimer?.invalidate()
-        activeTimer?.invalidate()
+        if activeTimer != nil {
+            activeTimer?.invalidate()
+            activeTimer = nil
+        }
+        
+        if restTimer != nil {
+            restTimer?.invalidate()
+            restTimer = nil
+        }
     }
     
     @IBAction func pressedReset(_ sender: UIButton){
         print("Reset")
+        
+        if activeTimer != nil {
+            activeTimer?.invalidate()
+            activeTimer = nil
+        }
+        
+        if restTimer != nil {
+            restTimer?.invalidate()
+            restTimer = nil
+        }
         
         activeCounter = valueActive
         restCounter = valueRest
@@ -401,12 +436,16 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 running = true
                 
                 if pausedDuringRestTime {
-                    restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
-                    restTimer?.fire()
-                    pausedDuringRestTime = false
+                    if restTimer == nil {
+                        restTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateRestCounter), userInfo: nil, repeats: true)
+                        restTimer?.fire()
+                        pausedDuringRestTime = false
+                    }
                 } else {
-                    activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
-                    activeTimer?.fire()
+                    if activeTimer == nil {
+                        activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
+                        activeTimer?.fire()
+                    }
                 }
                 
             } else {
@@ -419,8 +458,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
                 
                 if activeTimer != nil && restTimer == nil {
                     activeTimer?.invalidate()
+                    activeTimer = nil
                 } else if activeTimer == nil && restTimer != nil{
                     restTimer?.invalidate()
+                    restTimer = nil
                     pausedDuringRestTime = true
                 }
             }
@@ -432,8 +473,10 @@ class TimerViewController: UIViewController, UINavigationControllerDelegate {
             startButton.layer.borderWidth = 2
             startButton.layer.borderColor = UIColor.green.cgColor
             running = true
-            activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
-            activeTimer?.fire()
+            if activeTimer == nil {
+                activeTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateActiveCounter), userInfo: nil, repeats: true)
+                activeTimer?.fire()
+            }
         }
     }
 }
