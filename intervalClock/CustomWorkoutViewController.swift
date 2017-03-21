@@ -53,7 +53,6 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         restPicker.dataSource = self
         restPicker.delegate = self
         restPicker.tag = 1
-
         
         roundsField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
         nameField.addTarget(self, action: #selector(CustomWorkoutViewController.didChangeText), for: .editingChanged)
@@ -64,7 +63,66 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CustomWorkoutViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = false
+        toolBar.tintColor = UIColor.orange
+        
+        let customPreviousView: UIButton = UIButton(type: UIButtonType.custom)
+        customPreviousView.setImage(UIImage(named: "previous"), for: UIControlState.normal)
+        customPreviousView.addTarget(self, action:  #selector(CustomWorkoutViewController.textFieldPrevious), for: UIControlEvents.touchUpInside)
+        customPreviousView.frame = CGRect(x: 0, y: 0, width: 31, height: 31)
+        customPreviousView.tintColor = UIColor.orange
 
+        let customNextView: UIButton = UIButton(type: UIButtonType.custom)
+        customNextView.setImage(UIImage(named: "next"), for: UIControlState.normal)
+        customNextView.addTarget(self, action:  #selector(CustomWorkoutViewController.textFieldNext), for: UIControlEvents.touchUpInside)
+        customNextView.frame = CGRect(x: 0, y: 0, width: 31, height: 31)
+        
+        let previousButton = UIBarButtonItem(customView: customPreviousView)
+        let nextButton = UIBarButtonItem(customView: customNextView)
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace,
+                                          target: nil,
+                                          action: nil)
+        let doneButton = UIBarButtonItem(title: "Done",
+                                         style: UIBarButtonItemStyle.done,
+                                         target: nil,
+                                         action:  #selector(CustomWorkoutViewController.startCustomizedWorkout(sender:)))
+        
+        toolBar.setItems([previousButton, nextButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        toolBar.sizeToFit()
+        
+        roundsField.delegate = self
+        nameField.delegate = self
+        
+        roundsField.inputAccessoryView = toolBar
+        nameField.inputAccessoryView = toolBar
+    }
+    
+    func textFieldNext(){
+        if(nameField.isEditing){
+            roundsField.becomeFirstResponder()
+        } else {
+            dismissKeyboard()
+        }
+    }
+    
+    func textFieldPrevious(){
+        if(roundsField.isEditing){
+            nameField.becomeFirstResponder()
+        } else {
+            dismissKeyboard()
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if(textField.tag == 1){
+            if UIDevice.current.orientation.isLandscape {
+                customView.contentOffset.y -= 80
+            }
+        }
     }
     
     func dismissKeyboard() {
