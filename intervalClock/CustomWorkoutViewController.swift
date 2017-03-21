@@ -123,14 +123,12 @@ class CustomWorkoutViewController: UIViewController, UINavigationControllerDeleg
     }
     
     func didChangeText(textField:UITextField) {
-        if(!(roundsField.text?.isEmpty)!
-            && !(nameField.text?.isEmpty)!){
+        if(!(roundsField.text?.isEmpty)! && !(nameField.text?.isEmpty)!){
             startWorkout.isEnabled = true
             startWorkout.layer.borderColor = UIColor.green.cgColor
             startWorkout.backgroundColor = UIColor(red: 0, green: 144/255, blue: 0, alpha: 0.42)
             startWorkout.setTitleColor(UIColor.green, for: .normal)
         } else {
-            print("Here")
             startWorkout.isEnabled = false
             startWorkout.layer.borderColor = UIColor.red.cgColor
             startWorkout.backgroundColor = UIColor(red: 144/255, green: 0, blue: 0, alpha: 0.42)
